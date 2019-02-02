@@ -2,10 +2,20 @@
 
 module Database.Persist.Mapper.Util where
 
+{-|
+Module: Database.Persist.Mapper.Util
+Description: functions useful outside of 'PersistEntity' instances
+Copyright: © 2018-2019 Satsuma labs
+
+This module defines additional functions (mainly lenses) for use outside of 'PersistEntity' instances.
+-}
+
 import Database.Persist.Mapper.InstanceHelpers
 import Database.Persist
 import Control.Lens
 
+-- | Collect the difference between two Wntity values as an SQL-compatible 'Update'
+-- Compares values only, not the keys.
 sqlDiff :: (SimplePersistEntity e) => Entity e -> Entity e -> [Update e]
 sqlDiff old new = allFields >>= diffField where
     diffField (SEF f) = let
@@ -26,6 +36,9 @@ entKey f (Entity k v) = fmap (\k' -> Entity k' v) (f k)
 entVal :: (PersistEntity a) => Lens' (Entity a) a
 entVal f (Entity k v) = fmap (Entity k) (f v)
 
+-- | Lift a lens through a maybe to become a psuedo-lens.
+-- This functions corectly as a getter and will function as a lens on 'Just' values.
+-- Updates will fail on 'Nothing' values.
 unsafeLiftLensMaybe :: Lens' a b -> Lens' (Maybe a) (Maybe b)
 unsafeLiftLensMaybe l f (Just x) = fmap outerfunc . f . Just $ view l x
     where outerfunc (Just y) = Just (set l y x)
@@ -33,7 +46,7 @@ unsafeLiftLensMaybe l f (Just x) = fmap outerfunc . f . Just $ view l x
 unsafeLiftLensMaybe _ f Nothing = fmap (const Nothing) (f Nothing)
 
 
--- | Utility class for Database records with natural keys
+-- | Class for entities with natural keys allowing for lenses which correctly handle the duplicate keys in 'Entity'.
 class (PersistEntity a) => HasNaturalKey a where
     -- | Derives the key from the value
     natKey :: Lens' a (Key a)

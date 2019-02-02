@@ -5,5 +5,6 @@ While this class is capable of representing any isomorphism between the data str
 instances of it are somewhat messy to write by hand, and are usually only generated via Template Haskell through `Database.Persist.TH`,
 which is limited to generating data structures which are a flat record with a one-to-one correspondence between Haskell fields and SQL fields.
 
-The Aim of this library is to provide a set of building blocks that can be used to write `PersistEntity` instances for non-trivial isomorphisms.
-This allows a number of useful features, such as multi-column fields and computed columns.
+The aim of this library is to provide a set of building blocks that can be used to manually write `PersistEntity` for existing data types.
+This allows for more complex structures than a flat record of columns, with non-trivial isomorphisms to the database row,
+allowing for structures such as multi-column composite fields and computed columns. 
