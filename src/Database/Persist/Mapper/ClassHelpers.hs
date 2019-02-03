@@ -1,7 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables, RankNTypes, GADTs, TypeFamilies, TypeApplications, LambdaCase, OverloadedStrings #-}
 
 {-|
-Module: Database.Persist.Mapper.InstanceHelpers
+Module: Database.Persist.Mapper.ClassHelpers
 Description: Building blocks for creating 'PersistEntity' instances
 Copyright: © 2018-2019 Satsuma labs
 
@@ -9,7 +9,7 @@ This module defines a set of building blocks for manually writing PersistEntity 
 allowing for mapping existing data types into a database.
 -}
 
-module Database.Persist.Mapper.InstanceHelpers where
+module Database.Persist.Mapper.ClassHelpers where
 
 import Database.Persist
 import Data.Text (Text, pack)

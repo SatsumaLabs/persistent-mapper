@@ -10,7 +10,7 @@ Copyright: © 2018-2019 Satsuma labs
 This module defines additional functions (mainly lenses) for use outside of 'PersistEntity' instances.
 -}
 
-import Database.Persist.Mapper.InstanceHelpers
+import Database.Persist.Mapper.ClassHelpers
 import Database.Persist
 import Control.Lens
 
