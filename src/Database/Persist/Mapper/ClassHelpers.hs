@@ -156,6 +156,9 @@ class PersistCompositeField a where
     parseMultiField :: FromFieldsA a
     -- | Emitter to database columns, in the order defined in 'allSubfields'.
     toMultiField :: a -> [SomePersistField]
+    toMultiField x = fmap getField allSubfields where
+        getField (SSF f) = SomePersistField $ x ^. subfieldLens f
+
     -- | FieldDef for each subfield given a base field name.
     subfieldDef :: EntitySubfield a b -> Text -> FieldDef
     -- | Lens in the haskell type for each FieldDef to the value of that field.
@@ -241,3 +244,8 @@ simpleUniqueToFieldNames = fmap (\(SFV field _) -> let fd = persistFieldDef fiel
 -- | implementation using 'SimplePersistEntity'
 simpleUniqueToValues :: (SimplePersistEntity e) => Unique e -> [PersistValue]
 simpleUniqueToValues = fmap (\(SFV _ val) -> toPersistValue val) . uniqueToFields
+
+-- | Implementation of 'toPersistFields' using 'fieldLens'es.
+simpleToPersistFields :: (SimplePersistEntity e) => e -> [SomePersistField]
+simpleToPersistFields x = fmap getField allFields where
+    getField (SEF f) = SomePersistField $ x ^. fieldLens f
